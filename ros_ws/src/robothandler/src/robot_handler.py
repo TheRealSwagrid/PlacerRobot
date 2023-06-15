@@ -55,7 +55,7 @@ if __name__ == '__main__':
     rospy.logwarn("HEYO IM HERE")
     server = VirtualCapabilityServer(int(rospy.get_param('~semantix_port')))
     place_robot = PlacerRobot(server)
-
+    place_robot.start()
     robot = RobotHandler()
 
     place_robot.funtionality["set_pos_viz"] = robot.set_pos
