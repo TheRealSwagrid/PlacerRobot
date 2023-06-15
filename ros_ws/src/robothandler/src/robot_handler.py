@@ -10,7 +10,7 @@ from PlacerRobot import PlacerRobot
 
 class RobotHandler:
     def __init__(self):
-        self.position = [0, 2, 0]
+        self.position = [0, 0, 0]
         self.rotation = [0, 0, 0, 1]
         self.scale = .1
         self.pub = rospy.Publisher("/robot", Marker, queue_size=1)
@@ -52,7 +52,7 @@ class RobotHandler:
 if __name__ == '__main__':
     rospy.init_node('rosnode')
     rate = rospy.Rate(10)
-
+    rospy.logwarn("HEYO IM HERE")
     server = VirtualCapabilityServer(int(rospy.get_param('~semantix_port')))
     place_robot = PlacerRobot(server)
 
