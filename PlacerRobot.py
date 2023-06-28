@@ -35,7 +35,7 @@ class PlacerRobot(AbstractVirtualCapability):
             self.position[1] += current_vel
             if self.funtionality["set_pos_viz"] is not None:
                 self.funtionality["set_pos_viz"](self.position)
-            sleep(abs(current_vel*2))
+            sleep(1 + abs(current_vel*2))
 
         return {"Position3D": self.position}
 
