@@ -20,7 +20,8 @@ class PlacerRobot(AbstractVirtualCapability):
 
         goal = self.position
         goal[1] += val
-
+        self.funtionality["set_pos_viz"](goal)
+        return
         current_vel = 0
         while abs(self.position[1] - goal[1]) > 0.1:
             if val > 0:
