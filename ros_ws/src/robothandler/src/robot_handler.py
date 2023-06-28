@@ -16,6 +16,7 @@ class RobotHandler:
         self.pub = rospy.Publisher("/robot", Marker, queue_size=1)
 
     def set_pos(self, pos: list):
+        rospy.logwarn(f"Gettin new position: {pos}")
         self.position = pos
 
     def publish_visual(self):
