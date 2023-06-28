@@ -12,7 +12,7 @@ class PlacerRobot(AbstractVirtualCapability):
         self.position = [0., 0., 0.]
         self.funtionality = {"set_pos_viz": None}
         self.max_vel = 0.1
-        self.acc = 0.005
+        self.acc = 0.0005
 
     def MoveBy(self, params: dict):
         formatPrint(self, f"Forwarding with {params}")
@@ -31,6 +31,7 @@ class PlacerRobot(AbstractVirtualCapability):
                 current_vel = -self.max_vel if -current_vel > self.max_vel else current_vel
             else:
                 break
+            formatPrint(self, f"Current Velocity {current_vel}")
             self.position[1] += current_vel
             if self.funtionality["set_pos_viz"] is not None:
                 self.funtionality["set_pos_viz"](self.position)
