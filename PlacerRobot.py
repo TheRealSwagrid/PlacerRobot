@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import signal
 import sys
+from copy import copy
 from time import sleep
 
 from AbstractVirtualCapability import AbstractVirtualCapability, VirtualCapabilityServer, formatPrint
@@ -18,7 +19,7 @@ class PlacerRobot(AbstractVirtualCapability):
         formatPrint(self, f"Forwarding with {params}")
         val = params["SimpleDoubleParameter"]
 
-        goal = self.position
+        goal = copy(self.position)
         goal[1] += val
         #self.funtionality["set_pos_viz"](goal)
         #return {"Position3D": goal}
