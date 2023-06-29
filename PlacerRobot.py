@@ -13,8 +13,8 @@ class PlacerRobot(AbstractVirtualCapability):
         super().__init__(server)
         self.position = [0., 0., 0.]
         self.funtionality = {"set_pos_viz": None}
-        self.max_vel = 0.1
-        self.acc = 0.0005
+        self.max_vel = 0.25
+        self.acc = 0.002
 
     def MoveBy(self, params: dict):
         formatPrint(self, f"Forwarding with {params}")
@@ -44,7 +44,8 @@ class PlacerRobot(AbstractVirtualCapability):
             formatPrint(self, f"Going with Vel: {current_vel}")
             tmr = time.time()
             while time.time() - tmr < abs(current_vel*2):
-                self.funtionality["set_pos_viz"](self.position)
+                if self.funtionality["set_pos_viz"] is not None:
+                    self.funtionality["set_pos_viz"](self.position)
                 sleep(.001)
         return {"Position3D": self.position}
 
