@@ -20,8 +20,9 @@ class PlacerRobot(AbstractVirtualCapability):
 
         goal = self.position
         goal[1] += val
-        self.funtionality["set_pos_viz"](goal)
-        return {"Position3D": goal}
+        #self.funtionality["set_pos_viz"](goal)
+        #return {"Position3D": goal}
+
         current_vel = 0
         while abs(self.position[1] - goal[1]) > 0.1:
             if val > 0:
@@ -36,7 +37,8 @@ class PlacerRobot(AbstractVirtualCapability):
             self.position[1] += current_vel
             if self.funtionality["set_pos_viz"] is not None:
                 self.funtionality["set_pos_viz"](self.position)
-            sleep(1 + abs(current_vel*2))
+            formatPrint(self, f"Going with Vel: {current_vel}")
+            sleep(abs(current_vel*2))
 
         return {"Position3D": self.position}
 
