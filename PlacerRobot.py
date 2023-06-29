@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import signal
 import sys
+import time
 from copy import copy
 from time import sleep
 
@@ -39,10 +40,12 @@ class PlacerRobot(AbstractVirtualCapability):
             formatPrint(self, f"Current Velocity {current_vel}")
             self.position[1] += current_vel
             #if self.funtionality["set_pos_viz"] is not None:
-            self.funtionality["set_pos_viz"](self.position)
-            formatPrint(self, f"Going with Vel: {current_vel}")
-            sleep(abs(current_vel*2))
 
+            formatPrint(self, f"Going with Vel: {current_vel}")
+            tmr = time.time()
+            while time.time() - tmr < abs(current_vel*2):
+                self.funtionality["set_pos_viz"](self.position)
+                sleep(.001)
         return {"Position3D": self.position}
 
     def GetPosition(self, params: dict):
