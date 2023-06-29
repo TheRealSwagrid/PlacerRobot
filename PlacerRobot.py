@@ -35,8 +35,8 @@ class PlacerRobot(AbstractVirtualCapability):
                 break
             formatPrint(self, f"Current Velocity {current_vel}")
             self.position[1] += current_vel
-            if self.funtionality["set_pos_viz"] is not None:
-                self.funtionality["set_pos_viz"](self.position)
+            #if self.funtionality["set_pos_viz"] is not None:
+            self.funtionality["set_pos_viz"](self.position)
             formatPrint(self, f"Going with Vel: {current_vel}")
             sleep(abs(current_vel*2))
 
