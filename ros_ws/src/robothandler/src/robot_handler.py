@@ -52,7 +52,7 @@ class RobotHandler:
 
 if __name__ == '__main__':
     rospy.init_node('rosnode')
-    rate = rospy.Rate(10)
+    rate = rospy.Rate(25)
     rospy.logwarn("HEYO IM HERE")
     server = VirtualCapabilityServer(int(rospy.get_param('~semantix_port')))
     place_robot = PlacerRobot(server)
