@@ -24,6 +24,8 @@ class PlacerRobot(AbstractVirtualCapability):
         #return {"Position3D": goal}
 
         current_vel = 0
+
+        formatPrint(self, f"Pos: {self.position} Goal {goal} | {abs(self.position[1] - goal[1])} ")
         while abs(self.position[1] - goal[1]) > 0.1:
             if val > 0:
                 current_vel += self.acc
