@@ -3,7 +3,7 @@ SHELL ["/bin/bash", "-c"]
 
 ENV semantix_port=7500
 ENV DEBIAN_FRONTEND=noninteractive
-#ENV ROS_IP=127.0.0.1
+ENV ROS_IP=127.0.0.1
 
 
 # ROS-Noetic Setup
