@@ -13,7 +13,7 @@ class RobotHandler:
         self.position = [0, 0, 0]
         self.rotation = [0, 0, 0, 1]
         self.scale = .1
-        self.pub = rospy.Publisher("/rob", Marker, queue_size=1)
+        self.pub = rospy.Publisher("/robot", Marker, queue_size=1)
 
     def set_pos(self, pos: list):
         rospy.logwarn(f"Gettin new position: {pos}")
