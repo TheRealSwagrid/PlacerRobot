@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <launch>
-    <node pkg="robothandler" type="robot_handler.py" name="my_robot">
+    <node pkg="robothandler" type="robot_handler.py" name="robot_handler_$(arg semantix_port)">
         <param name="semantix_port" value="$(arg semantix_port)"/>
     </node>
 
