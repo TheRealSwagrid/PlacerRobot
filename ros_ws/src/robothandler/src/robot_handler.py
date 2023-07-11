@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 
 import rospy
-from visualization_msgs.msg import Marker
+import tf
 from AbstractVirtualCapability import VirtualCapabilityServer
+from visualization_msgs.msg import Marker
 
 from PlacerRobot import PlacerRobot
-
 
 
 class RobotHandler:
@@ -13,7 +13,9 @@ class RobotHandler:
         self.position = [0, 0, 0]
         self.rotation = [0, 0, 0, 1]
         self.scale = .1
+        self.br = tf.TransformBroadcaster()
         self.pub = rospy.Publisher("/robot", Marker, queue_size=1)
+        self.name = "placerrobot"
 
     def set_pos(self, pos: list):
         rospy.logwarn(f"Gettin new position: {pos}")
@@ -49,7 +51,6 @@ class RobotHandler:
         self.pub.publish(marker)
 
 
-
 if __name__ == '__main__':
     rospy.init_node('rosnode')
     rate = rospy.Rate(25)
@@ -61,6 +62,11 @@ if __name__ == '__main__':
 
     place_robot.funtionality["set_pos_viz"] = robot.set_pos
 
+    place_robot.funtionality["set_name"] = robot.set_name
+    place_robot.funtionality["get_name"] = robot.get_tf_name
+
     while not rospy.is_shutdown():
+        robot.br.sendTransform(robot.position,
+                               tf.transformations.quaternion_from_euler(0, 0, 0), rospy.Time.now(), robot.name, "world")
         robot.publish_visual()
         rate.sleep()
