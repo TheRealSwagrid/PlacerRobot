@@ -50,6 +50,9 @@ class RobotHandler:
         rospy.logwarn(f"Publishing with new Position {self.position}")
         self.pub.publish(marker)
 
+        self.br.sendTransform(self.position,
+                              tf.transformations.quaternion_from_euler(0, 0, 0), rospy.Time.now(), self.name, "world")
+
 
 if __name__ == '__main__':
     rospy.init_node('rosnode')
