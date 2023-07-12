@@ -18,7 +18,7 @@ class RobotHandler:
         self.name = "placerrobot"
 
     def set_pos(self, pos: list):
-        rospy.logwarn(f"Gettin new position: {pos}")
+        # rospy.logwarn(f"Gettin new position: {pos}")
         self.position = pos
 
     def publish_visual(self):
@@ -50,6 +50,7 @@ class RobotHandler:
         rospy.logwarn(f"Publishing with new Position {self.position}")
         self.pub.publish(marker)
 
+
         self.br.sendTransform(self.position,
                               tf.transformations.quaternion_from_euler(0, 0, 0), rospy.Time.now(), self.name, "world")
 
@@ -69,7 +70,5 @@ if __name__ == '__main__':
     place_robot.funtionality["get_name"] = robot.get_tf_name
 
     while not rospy.is_shutdown():
-        robot.br.sendTransform(robot.position,
-                               tf.transformations.quaternion_from_euler(0, 0, 0), rospy.Time.now(), robot.name, "world")
         robot.publish_visual()
         rate.sleep()
