@@ -21,6 +21,12 @@ class RobotHandler:
         # rospy.logwarn(f"Gettin new position: {pos}")
         self.position = pos
 
+    def set_name(self, name: str):
+        self.name = name
+
+    def get_tf_name(self):
+        return self.name
+
     def publish_visual(self):
         marker = Marker()
         marker.id = 100
