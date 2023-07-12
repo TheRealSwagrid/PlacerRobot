@@ -53,9 +53,7 @@ class RobotHandler:
         marker.type = Marker.MESH_RESOURCE
         marker.action = Marker.ADD
         marker.mesh_resource = r"package://robothandler/meshes/robot.dae"
-        rospy.logwarn(f"Publishing with new Position {self.position}")
         self.pub.publish(marker)
-
 
         self.br.sendTransform(self.position,
                               tf.transformations.quaternion_from_euler(0, 0, 0), rospy.Time.now(), self.name, "world")

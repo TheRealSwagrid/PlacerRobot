@@ -37,11 +37,10 @@ class PlacerRobot(AbstractVirtualCapability):
                 current_vel = -self.max_vel if -current_vel > self.max_vel else current_vel
             else:
                 break
-            formatPrint(self, f"Current Velocity {current_vel}")
+
             self.position[1] += current_vel
             #if self.funtionality["set_pos_viz"] is not None:
 
-            formatPrint(self, f"Going with Vel: {current_vel}")
             tmr = time.time()
             while time.time() - tmr < abs(current_vel*2):
                 if self.funtionality["set_pos_viz"] is not None:
