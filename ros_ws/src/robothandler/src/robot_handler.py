@@ -46,16 +46,16 @@ class RobotHandler:
 
             current_vel = self.max_vel * vector / np.linalg.norm(vector)
             self.position += current_vel
-            self.publish_visual()
 
-            #sleep((abs(current_vel[0]) + abs(current_vel[1]) + abs(current_vel[2])))
+            self.publish_visual()
+            sleep((abs(current_vel[0]) + abs(current_vel[1]) + abs(current_vel[2])))
 
     def publish_visual(self):
         marker = Marker()
         marker.id = 100
         marker.header.frame_id = "world"
         marker.header.stamp = rospy.Time.now()
-        marker.ns = f"place_robot"
+        marker.ns = self.name
         marker.lifetime = rospy.Duration(0)
         # marker.color.r = .1
         # marker.color.g = .15
