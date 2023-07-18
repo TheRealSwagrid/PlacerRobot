@@ -15,6 +15,7 @@ class PlacerRobot(AbstractVirtualCapability):
         self.funtionality = {"set_pos_viz": None, "get_name": None, "set_name": None}
         self.max_vel = 0.25
         self.acc = 0.002
+        self.current_block_id = None
 
     def MoveBy(self, params: dict):
         formatPrint(self, f"Forwarding with {params}")
@@ -47,6 +48,10 @@ class PlacerRobot(AbstractVirtualCapability):
                     self.funtionality["set_pos_viz"](self.position)
                 sleep(.001)
         return {"Position3D": self.position}
+
+    def PlaceBlock(self, params: dict):
+
+        return params
 
     def GetPosition(self, params: dict):
         formatPrint(self, f"Get Position {params}")

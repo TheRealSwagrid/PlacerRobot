@@ -6,7 +6,7 @@ import numpy as np
 from tf.transformations import euler_from_quaternion, quaternion_about_axis
 from AbstractVirtualCapability import VirtualCapabilityServer
 from visualization_msgs.msg import Marker
-
+from copy import copy
 from PlacerRobot import PlacerRobot
 
 
@@ -14,7 +14,7 @@ class RobotHandler:
     def __init__(self):
         self.position = [0, 0, 0]
         self.rotation = [0, 0, 0, 1]
-        self.scale = .1
+        self.scale = .15
         self.br = tf.TransformBroadcaster()
         self.pub = rospy.Publisher("/robot", Marker, queue_size=1)
         self.name = "placerrobot"
@@ -57,9 +57,10 @@ class RobotHandler:
         marker.mesh_resource = r"package://robothandler/meshes/robot.dae"
         self.pub.publish(marker)
 
-
+        pos = copy(self.position)
+        pos[2] += .2
         rot = list(quaternion_about_axis(np.deg2rad(90.), [0,0,1]))
-        self.br.sendTransform(self.position,
+        self.br.sendTransform(pos,
                               rot, rospy.Time.now(), self.name, "world")
 
 
