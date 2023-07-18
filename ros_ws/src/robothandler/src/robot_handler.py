@@ -13,7 +13,7 @@ from time import sleep
 
 class RobotHandler:
     def __init__(self):
-        self.position = np.array([0, 0, 0])
+        self.position = np.array([0., 0., 0.])
         self.rotation = [0, 0, 0, 1]
         self.scale = .15
         self.br = tf.TransformBroadcaster()
