@@ -28,7 +28,13 @@ class PlacerRobot(AbstractVirtualCapability):
         return {"Position3D": self.position}
 
     def PlaceBlock(self, params: dict):
+        if self.current_block_id is not None:
+            self.invoke_sync("detach_block", {"SimpleIntegerParameter": self.current_block_id})
+        return {}
 
+    def TransferBlock(self, params: dict):
+        self.current_block_id = params["SimpleIntegerParameter"]
+        self.invoke_sync("attach_block", {"SimpleIntegerParameter":self.current_block_id, "SimpleStringParameter":self.funtionality["get_name"]()})
         return params
 
     def GetPosition(self, params: dict):
