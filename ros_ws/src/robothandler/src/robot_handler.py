@@ -21,6 +21,7 @@ class RobotHandler:
 
     def set_pos(self, pos: list):
         # rospy.logwarn(f"Gettin new position: {pos}")
+
         self.position = pos
 
     def set_name(self, name: str):

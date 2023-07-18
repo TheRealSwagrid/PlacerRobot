@@ -55,7 +55,11 @@ class PlacerRobot(AbstractVirtualCapability):
 
     def GetPosition(self, params: dict):
         formatPrint(self, f"Get Position {params}")
-        return {"Position3D": self.position}
+        pos = copy(self.position)
+        pos[2] += .05
+        pos[1] += .2
+
+        return {"Position3D": pos}
 
     def Settf_name(self, params: dict):
         tf_name = params["SimpleStringParameter"]
