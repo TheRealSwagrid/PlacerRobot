@@ -29,7 +29,7 @@ class RobotHandler:
         return self.name
 
     def get_pos(self):
-        return self.position
+        return self.position.tolist()
 
     def set_pos(self, goal: list):
 
@@ -89,8 +89,8 @@ class RobotHandler:
         self.pub.publish(marker)
 
         pos = copy(self.position)
-        pos[2] += .05
-        pos[1] += 0.1
+        pos[2] += .2
+        pos[1] += 0.5
         pos[0] += 0
         rot = list(quaternion_about_axis(np.deg2rad(90.), [0,0,1]))
         self.br.sendTransform(pos,
