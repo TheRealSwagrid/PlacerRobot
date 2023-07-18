@@ -83,6 +83,9 @@ class RobotHandler:
         marker.mesh_resource = r"package://robothandler/meshes/robot.dae"
         self.pub.publish(marker)
 
+        pos = copy(self.position)
+
+        pos[2] += .2
 
         rot = list(quaternion_about_axis(np.deg2rad(90.), [0,0,1]))
         self.br.sendTransform(self.position.tolist(),
