@@ -35,7 +35,6 @@ class RobotHandler:
 
         rospy.logwarn(f"Going to Position: {goal}")
 
-        vel = self.acc
         while True:
             goal = np.array(goal)
             vector = goal - self.position
@@ -46,15 +45,7 @@ class RobotHandler:
                 return self.position.tolist()
 
             current_vel = self.max_vel * vector / np.linalg.norm(vector)
-
             self.position += current_vel
-
-            vel += self.acc
-            if vel > 0:
-                vel = min(vel, self.max_vel)
-            else:
-                vel = max(vel, -self.max_vel)
-
             self.publish_visual()
             sleep((abs(current_vel[0]) + abs(current_vel[1]) + abs(current_vel[2])))
 
