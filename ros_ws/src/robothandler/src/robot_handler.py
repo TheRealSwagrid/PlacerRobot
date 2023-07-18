@@ -47,7 +47,8 @@ class RobotHandler:
             current_vel = self.max_vel * vector / np.linalg.norm(vector)
             self.position += current_vel
             self.publish_visual()
-            sleep((abs(current_vel[0]) + abs(current_vel[1]) + abs(current_vel[2])))
+
+            #sleep((abs(current_vel[0]) + abs(current_vel[1]) + abs(current_vel[2])))
 
     def publish_visual(self):
         marker = Marker()
@@ -78,9 +79,9 @@ class RobotHandler:
         self.pub.publish(marker)
 
         pos = copy(self.position)
-        pos[2] += .2
-        pos[1] += 0.5
-        pos[0] += 0
+        #pos[2] += .2
+        #pos[1] += 0.5
+        #pos[0] += 0
         rot = list(quaternion_about_axis(np.deg2rad(90.), [0,0,1]))
         self.br.sendTransform(pos,
                               rot, rospy.Time.now(), self.name, "world")
