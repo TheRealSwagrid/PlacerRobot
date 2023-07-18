@@ -2,6 +2,7 @@
 
 import rospy
 import tf
+from tf.transformations import euler_from_quaternion, quaternion_about_axis
 from AbstractVirtualCapability import VirtualCapabilityServer
 from visualization_msgs.msg import Marker
 
@@ -55,8 +56,9 @@ class RobotHandler:
         marker.mesh_resource = r"package://robothandler/meshes/robot.dae"
         self.pub.publish(marker)
 
+        rot = list(quaternion_about_axis(90, [0,0,1]))
         self.br.sendTransform(self.position,
-                              tf.transformations.quaternion_from_euler(0, 0, 0), rospy.Time.now(), self.name, "world")
+                              rot, rospy.Time.now(), self.name, "world")
 
 
 if __name__ == '__main__':
