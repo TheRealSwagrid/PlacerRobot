@@ -18,6 +18,8 @@ class PlacerRobot(AbstractVirtualCapability):
     def MoveBy(self, params: dict):
         formatPrint(self, f"Forwarding with {params}")
         val = params["SimpleDoubleParameter"]
+        if self.funtionality["set_name"] is not None:
+            self.position = self.funtionality["get_pos"]()
         goal = copy(self.position)
         goal[1] += val
 

@@ -78,12 +78,9 @@ class RobotHandler:
         marker.mesh_resource = r"package://robothandler/meshes/robot.dae"
         self.pub.publish(marker)
 
-        pos = copy(self.position)
-        #pos[2] += .2
-        #pos[1] += 0.5
-        #pos[0] += 0
+
         rot = list(quaternion_about_axis(np.deg2rad(90.), [0,0,1]))
-        self.br.sendTransform(pos,
+        self.br.sendTransform(self.position.tolist(),
                               rot, rospy.Time.now(), self.name, "world")
 
 
