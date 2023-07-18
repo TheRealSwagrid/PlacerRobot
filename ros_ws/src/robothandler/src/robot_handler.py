@@ -34,21 +34,24 @@ class RobotHandler:
     def set_pos(self, goal: list):
 
         rospy.logwarn(f"Going to Position: {goal}")
+        try:
+            while True:
+                goal = np.array(goal)
+                vector = goal - self.position
 
-        while True:
-            goal = np.array(goal)
-            vector = goal - self.position
+                if np.linalg.norm(vector) < 0.1:
+                    self.position = goal
+                    self.publish_visual()
+                    return self.position.tolist()
 
-            if np.linalg.norm(vector) < 0.1:
-                self.position = goal
+                current_vel = self.max_vel * vector / np.linalg.norm(vector)
+                self.position += current_vel
+
                 self.publish_visual()
-                return self.position.tolist()
-
-            current_vel = self.max_vel * vector / np.linalg.norm(vector)
-            self.position += current_vel
-
-            self.publish_visual()
-            sleep((abs(current_vel[0]) + abs(current_vel[1]) + abs(current_vel[2])))
+                sleep((abs(current_vel[0]) + abs(current_vel[1]) + abs(current_vel[2])))
+        except Exception as e:
+            rospy.logerr(f"NEW ERROR {repr(e)}")
+            raise e
 
     def publish_visual(self):
         marker = Marker()
