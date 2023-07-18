@@ -8,6 +8,7 @@ from AbstractVirtualCapability import VirtualCapabilityServer
 from visualization_msgs.msg import Marker
 from copy import copy
 from PlacerRobot import PlacerRobot
+from time import sleep
 
 
 class RobotHandler:
@@ -27,6 +28,9 @@ class RobotHandler:
     def get_tf_name(self):
         return self.name
 
+    def get_pos(self):
+        return self.position
+
     def set_pos(self, goal: list):
 
         rospy.logwarn(f"Going to Position: {goal}")
@@ -43,7 +47,7 @@ class RobotHandler:
                 self.publish_visual()
                 return self.position.tolist()
 
-            current_vel = self.max_vel * vector / np.linalg.norm(vector)
+            current_vel = vel * vector / np.linalg.norm(vector)
 
             self.position += current_vel
 
@@ -103,6 +107,7 @@ if __name__ == '__main__':
     robot = RobotHandler()
 
     place_robot.funtionality["set_pos_viz"] = robot.set_pos
+    place_robot.funtionality["get_pos"] = robot.get_pos
 
     place_robot.funtionality["set_name"] = robot.set_name
     place_robot.funtionality["get_name"] = robot.get_tf_name

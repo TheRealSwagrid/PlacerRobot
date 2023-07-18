@@ -12,7 +12,7 @@ class PlacerRobot(AbstractVirtualCapability):
     def __init__(self, server):
         super().__init__(server)
         self.position = [0., 0., 0.]
-        self.funtionality = {"set_pos_viz": None, "get_name": None, "set_name": None}
+        self.funtionality = {"set_pos_viz": None, "get_name": None, "set_name": None, "get_pos": None}
         self.current_block_id = None
 
     def MoveBy(self, params: dict):
@@ -31,8 +31,9 @@ class PlacerRobot(AbstractVirtualCapability):
 
     def GetPosition(self, params: dict):
         formatPrint(self, f"Get Position {params}")
-        pos = copy(self.position)
-        return {"Position3D": pos}
+        if self.funtionality["set_name"] is not None:
+            self.position = self.funtionality["get_pos"]()
+        return {"Position3D": self.position}
 
     def Settf_name(self, params: dict):
         tf_name = params["SimpleStringParameter"]
