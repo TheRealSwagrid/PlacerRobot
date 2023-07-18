@@ -45,7 +45,7 @@ class RobotHandler:
                 self.publish_visual()
                 return self.position.tolist()
 
-            current_vel = vel * vector / np.linalg.norm(vector)
+            current_vel = self.max_vel * vector / np.linalg.norm(vector)
 
             self.position += current_vel
 
