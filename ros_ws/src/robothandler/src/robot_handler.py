@@ -13,7 +13,7 @@ from time import sleep
 
 class RobotHandler:
     def __init__(self):
-        self.position = [0, 0, 0]
+        self.position = np.array([0, 0, 0])
         self.rotation = [0, 0, 0, 1]
         self.scale = .15
         self.br = tf.TransformBroadcaster()
@@ -35,8 +35,6 @@ class RobotHandler:
 
         rospy.logwarn(f"Going to Position: {goal}")
 
-        self.br.sendTransform((goal[0], goal[1], goal[2]),
-                              tf.transformations.quaternion_from_euler(0, 0, 0), rospy.Time.now(), "goal", "world")
         vel = self.acc
         while True:
             goal = np.array(goal)
