@@ -58,7 +58,7 @@ class PlacerRobot(AbstractVirtualCapability):
         pos = copy(self.position)
         pos[2] += .05
         pos[1] += .2
-
+        pos[0] += .1
         return {"Position3D": pos}
 
     def Settf_name(self, params: dict):

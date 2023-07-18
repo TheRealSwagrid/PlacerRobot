@@ -61,6 +61,7 @@ class RobotHandler:
         pos = copy(self.position)
         pos[2] += .05
         pos[1] += .2
+        pos[0] += .1
         rot = list(quaternion_about_axis(np.deg2rad(90.), [0,0,1]))
         self.br.sendTransform(pos,
                               rot, rospy.Time.now(), self.name, "world")
