@@ -20,33 +20,11 @@ class PlacerRobot(AbstractVirtualCapability):
     def MoveBy(self, params: dict):
         formatPrint(self, f"Forwarding with {params}")
         val = params["SimpleDoubleParameter"]
-
         goal = copy(self.position)
         goal[1] += val
-        #self.funtionality["set_pos_viz"](goal)
-        #return {"Position3D": goal}
 
-        current_vel = 0
-
-        formatPrint(self, f"Pos: {self.position} Goal {goal} | {abs(self.position[1] - goal[1])} ")
-        while abs(self.position[1] - goal[1]) > 0.1:
-            if val > 0:
-                current_vel += self.acc
-                current_vel = self.max_vel if current_vel > self.max_vel else current_vel
-            elif val < 0:
-                current_vel -= self.acc
-                current_vel = -self.max_vel if -current_vel > self.max_vel else current_vel
-            else:
-                break
-
-            self.position[1] += current_vel
-            #if self.funtionality["set_pos_viz"] is not None:
-
-            tmr = time.time()
-            while time.time() - tmr < abs(current_vel*2):
-                if self.funtionality["set_pos_viz"] is not None:
-                    self.funtionality["set_pos_viz"](self.position)
-                sleep(.001)
+        if self.funtionality["set_pos_viz"] is not None:
+            self.position = self.funtionality["set_pos_viz"](goal)
         return {"Position3D": self.position}
 
     def PlaceBlock(self, params: dict):
@@ -56,9 +34,6 @@ class PlacerRobot(AbstractVirtualCapability):
     def GetPosition(self, params: dict):
         formatPrint(self, f"Get Position {params}")
         pos = copy(self.position)
-        pos[2] += .05
-        pos[1] += 0.1
-        pos[0] += 0
         return {"Position3D": pos}
 
     def Settf_name(self, params: dict):

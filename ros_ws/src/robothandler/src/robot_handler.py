@@ -18,17 +18,36 @@ class RobotHandler:
         self.br = tf.TransformBroadcaster()
         self.pub = rospy.Publisher("/robot", Marker, queue_size=1)
         self.name = "placerrobot"
-
-    def set_pos(self, pos: list):
-        # rospy.logwarn(f"Gettin new position: {pos}")
-
-        self.position = pos
+        self.max_vel = 0.25
+        self.acc = 0.002
 
     def set_name(self, name: str):
         self.name = name
 
     def get_tf_name(self):
         return self.name
+
+    def set_pos(self, goal: list):
+
+        rospy.logwarn(f"Going to Position: {goal}")
+
+        self.br.sendTransform((goal[0], goal[1], goal[2]),
+                              tf.transformations.quaternion_from_euler(0, 0, 0), rospy.Time.now(), "goal", "world")
+
+        while True:
+            goal = np.array(goal)
+            vector = goal - self.position
+
+            if np.linalg.norm(vector) < 0.1:
+                self.position = goal
+                self.publish_visual()
+                return self.position.tolist()
+
+            current_vel = self.max_vel * vector / np.linalg.norm(vector)
+            self.position += current_vel
+
+            self.publish_visual()
+            sleep((abs(current_vel[0]) + abs(current_vel[1]) + abs(current_vel[2])))
 
     def publish_visual(self):
         marker = Marker()
