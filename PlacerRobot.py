@@ -13,7 +13,7 @@ class PlacerRobot(AbstractVirtualCapability):
         super().__init__(server)
         self.position = [0., 0., 0.]
         self.funtionality = {"set_pos_viz": None, "get_name": None, "set_name": None}
-        self.max_vel = 0.25
+        self.max_vel = 0.05
         self.acc = 0.002
         self.current_block_id = None
 

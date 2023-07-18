@@ -33,7 +33,7 @@ class RobotHandler:
 
         self.br.sendTransform((goal[0], goal[1], goal[2]),
                               tf.transformations.quaternion_from_euler(0, 0, 0), rospy.Time.now(), "goal", "world")
-
+        vel = self.acc
         while True:
             goal = np.array(goal)
             vector = goal - self.position
@@ -43,8 +43,12 @@ class RobotHandler:
                 self.publish_visual()
                 return self.position.tolist()
 
-            current_vel = self.max_vel * vector / np.linalg.norm(vector)
+            current_vel = vel * vector / np.linalg.norm(vector)
+
             self.position += current_vel
+
+            vel += self.acc
+            vel = min(vel, self.max_vel)
 
             self.publish_visual()
             sleep((abs(current_vel[0]) + abs(current_vel[1]) + abs(current_vel[2])))
