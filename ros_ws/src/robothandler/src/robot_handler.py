@@ -18,7 +18,7 @@ class RobotHandler:
         self.br = tf.TransformBroadcaster()
         self.pub = rospy.Publisher("/robot", Marker, queue_size=1)
         self.name = "placerrobot"
-        self.max_vel = 0.05
+        self.max_vel = 0.1
         self.acc = 0.002
 
     def set_name(self, name: str):
@@ -43,7 +43,7 @@ class RobotHandler:
                 self.publish_visual()
                 return self.position.tolist()
 
-            current_vel = vel * vector / np.linalg.norm(vector)
+            current_vel = self.max_vel * vector / np.linalg.norm(vector)
 
             self.position += current_vel
 
