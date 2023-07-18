@@ -20,7 +20,7 @@ class RobotHandler:
         self.pub = rospy.Publisher("/robot", Marker, queue_size=1)
         self.name = "placerrobot"
         self.max_vel = 0.1
-        self.acc = 0.002
+        self.acc = 0.0001
 
     def set_name(self, name: str):
         self.name = name
