@@ -1,14 +1,16 @@
 #!/usr/bin/env python
 
+from copy import copy
+from time import sleep
+
+import numpy as np
 import rospy
 import tf
-import numpy as np
-from tf.transformations import euler_from_quaternion, quaternion_about_axis
 from AbstractVirtualCapability import VirtualCapabilityServer
+from tf.transformations import quaternion_about_axis
 from visualization_msgs.msg import Marker
-from copy import copy
+
 from PlacerRobot import PlacerRobot
-from time import sleep
 
 
 class RobotHandler:
@@ -17,8 +19,8 @@ class RobotHandler:
         self.rotation = [0, 0, 0, 1]
         self.scale = .15
         self.br = tf.TransformBroadcaster()
-        self.pub = rospy.Publisher("/robot", Marker, queue_size=1)
-        self.name = "placerrobot"
+        self.pub = rospy.Publisher(f"/robot", Marker, queue_size=1)
+        self.name = f"placerrobot@{int(rospy.get_param('~semantix_port'))}"
         self.max_vel = 0.1
         self.acc = 0.0001
 
@@ -54,7 +56,6 @@ class RobotHandler:
             vel += self.acc
             vel = min(vel, self.max_vel)
 
-
     def publish_visual(self):
         marker = Marker()
         marker.id = 100
@@ -88,7 +89,7 @@ class RobotHandler:
         pos[2] += .05
         pos[1] += .2
 
-        rot = list(quaternion_about_axis(np.deg2rad(90.), [0,0,1]))
+        rot = list(quaternion_about_axis(np.deg2rad(90.), [0, 0, 1]))
         self.br.sendTransform(pos.tolist(),
                               rot, rospy.Time.now(), self.name, "world")
 
