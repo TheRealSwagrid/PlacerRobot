@@ -103,11 +103,11 @@ if __name__ == '__main__':
     place_robot.start()
     robot = RobotHandler()
 
-    place_robot.funtionality["set_pos_viz"] = robot.set_pos
-    place_robot.funtionality["get_pos"] = robot.get_pos
+    place_robot.functionality["set_pos_viz"] = robot.set_pos
+    place_robot.functionality["get_pos"] = robot.get_pos
 
-    place_robot.funtionality["set_name"] = robot.set_name
-    place_robot.funtionality["get_name"] = robot.get_tf_name
+    place_robot.functionality["set_name"] = robot.set_name
+    place_robot.functionality["get_name"] = robot.get_tf_name
 
     while not rospy.is_shutdown():
         robot.publish_visual()
