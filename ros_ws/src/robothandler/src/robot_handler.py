@@ -33,6 +33,9 @@ class RobotHandler:
     def get_pos(self):
         return self.position.tolist()
 
+    def set_rot(self, quaternion):
+        self.rotation = quaternion
+
     def set_pos(self, goal: list):
 
         rospy.logwarn(f"Going to Position: {goal}")
@@ -108,6 +111,9 @@ if __name__ == '__main__':
 
     place_robot.functionality["set_name"] = robot.set_name
     place_robot.functionality["get_name"] = robot.get_tf_name
+
+    place_robot.functionality["get_rot"] = lambda: robot.rotation
+    place_robot.functionality["set_rot"] = robot.set_rot
 
     while not rospy.is_shutdown():
         robot.publish_visual()

@@ -11,8 +11,10 @@ from AbstractVirtualCapability import AbstractVirtualCapability, VirtualCapabili
 class PlacerRobot(AbstractVirtualCapability):
     def __init__(self, server):
         super().__init__(server)
+        self.direction = [0., 1., 0.]
         self.position = [0., 0., 0.]
-        self.funtionality = {"set_pos_viz": None, "get_name": None, "set_name": None, "get_pos": None}
+        self.rotation = [0., 0., 0., 1.]
+        self.funtionality = {"set_pos_viz": None, "get_name": None, "set_name": None, "get_pos": None, "get_rot": None, "set_rot": None}
         self.current_block_id = None
 
     def MoveBy(self, params: dict):
@@ -34,7 +36,8 @@ class PlacerRobot(AbstractVirtualCapability):
 
     def TransferBlock(self, params: dict):
         self.current_block_id = params["SimpleIntegerParameter"]
-        self.invoke_sync("attach_block", {"SimpleIntegerParameter":self.current_block_id, "SimpleStringParameter":self.funtionality["get_name"]()})
+        self.invoke_sync("attach_block", {"SimpleIntegerParameter": self.current_block_id,
+                                          "SimpleStringParameter": self.funtionality["get_name"]()})
         return params
 
     def GetPosition(self, params: dict):
@@ -54,6 +57,26 @@ class PlacerRobot(AbstractVirtualCapability):
         if self.funtionality["get_name"] is not None:
             tf_name = self.funtionality["get_name"]()
         return {"SimpleStringParameter": tf_name}
+
+    def SetRotation(self, params: dict):
+        quat = params["Quaternion"]
+        if self.functionality["set_rot"] is not None:
+            self.functionality["set_rot"](quat)
+        return {"Quaternion": quat}
+
+    def GetRotation(self, params: dict):
+        quat = [0, 0, 0, 0]
+        if self.functionality["get_rot"] is not None:
+            quat = self.functionality["get_rot"]()
+        return {"Quaternion": quat}
+
+    def GetDirection(self, params: dict):
+        return {"Vector3": self.direction}
+
+    def SetDirection(self, params: dict):
+        new_direction = params["Vector3"]
+        self.direction = new_direction
+        return self.GetDirection(params)
 
     def loop(self):
         pass
