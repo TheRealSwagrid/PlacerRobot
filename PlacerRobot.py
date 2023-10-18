@@ -14,19 +14,19 @@ class PlacerRobot(AbstractVirtualCapability):
         self.direction = [0., 1., 0.]
         self.position = [0., 0., 0.]
         self.rotation = [0., 0., 0., 1.]
-        self.funtionality = {"set_pos_viz": None, "get_name": None, "set_name": None, "get_pos": None, "get_rot": None, "set_rot": None}
+        self.functionality = {"set_pos_viz": None, "get_name": None, "set_name": None, "get_pos": None, "get_rot": None, "set_rot": None}
         self.current_block_id = None
 
     def MoveBy(self, params: dict):
         formatPrint(self, f"Forwarding with {params}")
         val = params["SimpleDoubleParameter"]
-        if self.funtionality["set_name"] is not None:
-            self.position = self.funtionality["get_pos"]()
+        if self.functionality["set_name"] is not None:
+            self.position = self.functionality["get_pos"]()
         goal = copy(self.position)
         goal[1] += val
 
-        if self.funtionality["set_pos_viz"] is not None:
-            self.position = self.funtionality["set_pos_viz"](goal)
+        if self.functionality["set_pos_viz"] is not None:
+            self.position = self.functionality["set_pos_viz"](goal)
         return {"Position3D": self.position}
 
     def PlaceBlock(self, params: dict):
@@ -37,25 +37,25 @@ class PlacerRobot(AbstractVirtualCapability):
     def TransferBlock(self, params: dict):
         self.current_block_id = params["SimpleIntegerParameter"]
         self.invoke_sync("attach_block", {"SimpleIntegerParameter": self.current_block_id,
-                                          "SimpleStringParameter": self.funtionality["get_name"]()})
+                                          "SimpleStringParameter": self.functionality["get_name"]()})
         return params
 
     def GetPosition(self, params: dict):
         formatPrint(self, f"Get Position {params}")
-        if self.funtionality["set_name"] is not None:
-            self.position = self.funtionality["get_pos"]()
+        if self.functionality["set_name"] is not None:
+            self.position = self.functionality["get_pos"]()
         return {"Position3D": self.position}
 
     def Settf_name(self, params: dict):
         tf_name = params["SimpleStringParameter"]
-        if self.funtionality["set_name"] is not None:
-            self.position = self.funtionality["set_name"](tf_name)
+        if self.functionality["set_name"] is not None:
+            self.position = self.functionality["set_name"](tf_name)
         return {"SimpleStringParameter": tf_name}
 
     def Gettf_name(self, params: dict):
         tf_name = "NO_ROS_CONNECTION"
-        if self.funtionality["get_name"] is not None:
-            tf_name = self.funtionality["get_name"]()
+        if self.functionality["get_name"] is not None:
+            tf_name = self.functionality["get_name"]()
         return {"SimpleStringParameter": tf_name}
 
     def SetRotation(self, params: dict):
