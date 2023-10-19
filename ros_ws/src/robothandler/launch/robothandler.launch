@@ -3,6 +3,4 @@
     <node pkg="robothandler" type="robot_handler.py" name="robot_handler_$(arg semantix_port)">
         <param name="semantix_port" value="$(arg semantix_port)"/>
     </node>
-
-    <node name="tf_publisher" pkg="tf" type="static_transform_publisher" args="0 0 1 0 0 0 1 world luca 5"/>
 </launch>
