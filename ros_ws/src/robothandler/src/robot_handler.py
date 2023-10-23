@@ -106,8 +106,8 @@ if __name__ == '__main__':
     place_robot.start()
     robot = RobotHandler()
 
-    place_robot.functionality["set_pos_viz"] = robot.set_pos
     place_robot.functionality["get_pos"] = robot.get_pos
+    place_robot.functionality["set_pos"] = robot.set_pos
 
     place_robot.functionality["set_name"] = robot.set_name
     place_robot.functionality["get_name"] = robot.get_tf_name

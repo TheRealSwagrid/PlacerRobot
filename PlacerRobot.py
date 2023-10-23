@@ -15,7 +15,7 @@ class PlacerRobot(AbstractVirtualCapability):
         self.direction = [0., 1., 0.]
         self.position = [0., 0., 0.]
         self.rotation = [0., 0., 0., 1.]
-        self.functionality = {"set_pos_viz": None, "get_name": None, "set_name": None, "get_pos": None, "get_rot": None, "set_rot": None}
+        self.functionality = {"get_name": None, "set_name": None, "get_pos": None, "set_pos":None, "get_rot": None, "set_rot": None}
         self.current_block_id = None
 
     def MoveBy(self, params: dict):
@@ -26,8 +26,8 @@ class PlacerRobot(AbstractVirtualCapability):
         goal = copy(self.position)
         goal[1] += val
 
-        if self.functionality["set_pos_viz"] is not None:
-            self.position = self.functionality["set_pos_viz"](goal)
+        if self.functionality["set_pos"] is not None:
+            self.position = self.functionality["set_pos"](goal)
         return {"Position3D": self.position}
 
     def PlaceBlock(self, params: dict):
@@ -40,6 +40,13 @@ class PlacerRobot(AbstractVirtualCapability):
         self.invoke_sync("attach_block", {"SimpleIntegerParameter": self.current_block_id,
                                           "SimpleStringParameter": self.functionality["get_name"]()})
         return params
+
+    def SetPosition(self, params: dict):
+        formatPrint(self, f"Set Position {params}")
+
+        if self.functionality["set_pos"] is not None:
+            self.position = self.functionality["set_pos"](params["Position3D"])
+        return {"Position3D": self.position}
 
     def GetPosition(self, params: dict):
         formatPrint(self, f"Get Position {params}")
