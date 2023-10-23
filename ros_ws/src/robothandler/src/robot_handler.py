@@ -7,7 +7,7 @@ import numpy as np
 import rospy
 import tf
 from AbstractVirtualCapability import VirtualCapabilityServer
-from tf.transformations import quaternion_about_axis
+from tf.transformations import quaternion_about_axis, quaternion_from_euler
 from visualization_msgs.msg import Marker
 
 from PlacerRobot import PlacerRobot
@@ -33,8 +33,9 @@ class RobotHandler:
     def get_pos(self):
         return self.position.tolist()
 
-    def set_rot(self, quaternion):
-        self.rotation = quaternion
+    def set_rot(self, rot):
+        self.rotation = quaternion_from_euler(rot[0], rot[1], rot[2])
+        return self.rotation
 
     def set_pos(self, goal: list):
 
