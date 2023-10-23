@@ -56,6 +56,7 @@ class RobotHandler:
 
             self.publish_visual()
             sleep((abs(current_vel[0]) + abs(current_vel[1]) + abs(current_vel[2])))
+            sleep(1)
             vel += self.acc
             vel = min(vel, self.max_vel)
 
