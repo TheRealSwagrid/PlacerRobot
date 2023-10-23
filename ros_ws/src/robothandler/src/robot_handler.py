@@ -49,7 +49,6 @@ class RobotHandler:
             if np.linalg.norm(vector) < 0.1:
                 self.position = goal
                 self.publish_visual()
-                sleep(1)
                 return self.position.tolist()
 
             current_vel = vel * vector / np.linalg.norm(vector)
