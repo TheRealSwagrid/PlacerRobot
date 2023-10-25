@@ -15,7 +15,7 @@ class PlacerRobot(AbstractVirtualCapability):
         self.direction = [0., 1., 0.]
         self.position = [0., 0., 0.]
         self.rotation = [0., 0., 0., 1.]
-        self.functionality = {"get_name": None, "set_name": None, "get_pos": None, "set_pos":None, "get_rot": None, "set_rot": None}
+        self.functionality = {"get_name": None, "set_name": None, "get_pos": None, "set_pos":None, "get_rot": None, "set_rot": None, "rotate": None}
         self.current_block_id = None
 
     def MoveBy(self, params: dict):
@@ -29,6 +29,20 @@ class PlacerRobot(AbstractVirtualCapability):
         if self.functionality["set_pos"] is not None:
             self.position = self.functionality["set_pos"](goal)
         return {"Position3D": self.position}
+
+    def RotateAroundAxis(self, params: dict):
+        axis = params["Axis"]
+        if axis == 'z':
+            axis = [0, 0, 1]
+        elif axis == 'y':
+            axis = [0, 1, 0]
+        elif axis == 'x':
+            axis = [1, 0, 0]
+        degree = params["SimpleDoubleParameter"]
+        if self.functionality["get_name"] is not None:
+            quat = self.functionality["rotate"](axis, degree)
+        formatPrint(self, f"New Quaternion {quat}")
+        return {"Quaternion": quat}
 
     def PlaceBlock(self, params: dict):
         if self.current_block_id is not None:

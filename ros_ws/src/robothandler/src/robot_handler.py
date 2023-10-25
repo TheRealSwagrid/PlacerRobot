@@ -33,6 +33,13 @@ class RobotHandler:
     def get_pos(self):
         return self.position.tolist()
 
+    def rotate(self, axis, deg):
+        axis = np.array(axis)
+        theta = np.deg2rad(deg)
+        self.rotation = list(quaternion_about_axis(theta, axis))
+        return self.rotation
+
+
     def set_rot(self, rot):
         self.rotation = quaternion_from_euler(rot[0], rot[1], rot[2])
         return self.rotation
@@ -115,6 +122,7 @@ if __name__ == '__main__':
 
     place_robot.functionality["get_rot"] = lambda: robot.rotation
     place_robot.functionality["set_rot"] = robot.set_rot
+    place_robot.functionality["rotate"] = robot.rotate
 
     while not rospy.is_shutdown():
         robot.publish_visual()
