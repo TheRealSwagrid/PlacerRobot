@@ -69,7 +69,7 @@ class Quaternion:
 
     def _multiply_with_vector(self, v):
         q2 = Quaternion.from_value(np.append(v, 0.0))
-        return (self * q2 * self.get_conjugate())._val[1:]
+        return (self * q2 * self.get_conjugate())._val[:3]
 
     def get_conjugate(self):
         x, y, z, w = self._val
@@ -100,6 +100,7 @@ class PlacerRobot(AbstractVirtualCapability):
         self.uri = f"PlacerRobot"
         self.direction = [0., 1., 0.]
         self.position = [0., 0., 0.]
+        # x, y, z, w
         self.rotation = [0., 0., 0., 1.]
         self.functionality = {"get_name": None, "set_name": None, "get_pos": None, "set_pos": None, "get_rot": None,
                               "set_rot": None, "rotate": None}
@@ -114,7 +115,6 @@ class PlacerRobot(AbstractVirtualCapability):
         goal = copy(self.position)
 
         goal += val * (Quaternion.from_value(np.array(self.rotation)) * self.direction)
-
 
         if self.functionality["set_pos"] is not None:
             self.position = self.functionality["set_pos"](goal)
