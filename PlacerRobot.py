@@ -78,10 +78,10 @@ class Quaternion:
 
     def __repr__(self):
         v, theta = self.get_axisangle()
-        return f"((%.6f; %.6f, %.6f, %.6f))" % (theta, v[0], v[1], v[2])
+        return f"((%.6f; %.6f, %.6f, %.6f))" % (v[0], v[1], v[2], theta)
 
     def get_axisangle(self):
-        v, w = self._val[1:], self._val[0]
+        v, w = self._val[:-2], self._val[-1]
         theta = acos(w) * 2.0
 
         return normalize(v), theta
