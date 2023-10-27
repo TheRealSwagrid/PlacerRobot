@@ -22,7 +22,6 @@ def normalize(v, tolerance=0.00001):
 class Quaternion:
 
     def from_axisangle(theta, v):
-        #theta = theta
         v = normalize(v)
 
         new_quaternion = Quaternion()
@@ -44,7 +43,7 @@ class Quaternion:
         y = y * sin(theta / 2.)
         z = z * sin(theta / 2.)
 
-        self._val = np.array([w, x, y, z])
+        self._val = np.array([x, y, z, w])
 
     def __mul__(self, b):
 
@@ -58,40 +57,40 @@ class Quaternion:
             raise Exception(f"Multiplication with unknown type {type(b)}")
 
     def _multiply_with_quaternion(self, q2):
-        w1, x1, y1, z1 = self._val
-        w2, x2, y2, z2 = q2._val
+        x1, y1, z1, w1 = self._val
+        x2, y2, z2, w2 = q2._val
         w = w1 * w2 - x1 * x2 - y1 * y2 - z1 * z2
         x = w1 * x2 + x1 * w2 + y1 * z2 - z1 * y2
         y = w1 * y2 + y1 * w2 + z1 * x2 - x1 * z2
         z = w1 * z2 + z1 * w2 + x1 * y2 - y1 * x2
 
-        result = Quaternion.from_value(np.array((w, x, y, z)))
+        result = Quaternion.from_value(np.array((x, y, z, w)))
         return result
 
     def _multiply_with_vector(self, v):
-        q2 = Quaternion.from_value(np.append((0.0), v))
+        q2 = Quaternion.from_value(np.append(v, 0.0))
         return (self * q2 * self.get_conjugate())._val[1:]
 
     def get_conjugate(self):
-        w, x, y, z = self._val
-        result = Quaternion.from_value(np.array((w, -x, -y, -z)))
+        x, y, z, w = self._val
+        result = Quaternion.from_value(np.array((-x, -y, -z, w)))
         return result
 
     def __repr__(self):
-        theta, v = self.get_axisangle()
+        v, theta = self.get_axisangle()
         return f"((%.6f; %.6f, %.6f, %.6f))" % (theta, v[0], v[1], v[2])
 
     def get_axisangle(self):
-        w, v = self._val[0], self._val[1:]
+        v, w = self._val[1:], self._val[0]
         theta = acos(w) * 2.0
 
-        return theta, normalize(v)
+        return normalize(v), theta
 
     def tolist(self):
         return self._val.tolist()
 
     def vector_norm(self):
-        w, v = self.get_axisangle()
+        v, w = self.get_axisangle()
         return np.linalg.norm(v)
 
 
@@ -115,6 +114,8 @@ class PlacerRobot(AbstractVirtualCapability):
         goal = copy(self.position)
 
         goal += val * (Quaternion.from_value(np.array(self.rotation)) * self.direction)
+        goal += val * self.direction
+
 
         if self.functionality["set_pos"] is not None:
             self.position = self.functionality["set_pos"](goal)
