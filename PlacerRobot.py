@@ -114,7 +114,6 @@ class PlacerRobot(AbstractVirtualCapability):
         goal = copy(self.position)
 
         goal += val * (Quaternion.from_value(np.array(self.rotation)) * self.direction)
-        goal += val * self.direction
 
 
         if self.functionality["set_pos"] is not None:
