@@ -194,7 +194,7 @@ class PlacerRobot(AbstractVirtualCapability):
         return {"Vector3": self.direction}
 
     def GetAbsoluteDirection(self, params: dict):
-        return {"Vector3": (Quaternion.from_value(np.array(self.rotation)) * self.direction)}
+        return {"Vector3": (Quaternion.from_value(np.array(self.rotation)) * self.direction).tolist()}
 
 
     def SetDirection(self, params: dict):
