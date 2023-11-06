@@ -193,6 +193,10 @@ class PlacerRobot(AbstractVirtualCapability):
     def GetDirection(self, params: dict):
         return {"Vector3": self.direction}
 
+    def GetAbsoluteDirection(self, params: dict):
+        return {"Vector3": (Quaternion.from_value(np.array(self.rotation)) * self.direction)}
+
+
     def SetDirection(self, params: dict):
         new_direction = params["Vector3"]
         self.direction = new_direction
