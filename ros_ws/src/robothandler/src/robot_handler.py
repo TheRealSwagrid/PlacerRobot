@@ -16,6 +16,7 @@ from PlacerRobot import PlacerRobot
 class RobotHandler:
     def __init__(self):
         self.position = np.array([0., 0., 0.])
+        self.tf_position = None
         self.rotation = [0, 0, 0, 1]
         self.scale = .15
         self.br = tf.TransformBroadcaster()
@@ -43,6 +44,32 @@ class RobotHandler:
     def set_rot(self, rot):
         self.rotation = quaternion_from_euler(rot[0], rot[1], rot[2])
         return self.rotation
+
+    def place_block(self, goal: list):
+        vel = self.acc
+        self.tf_position = copy(self.position)
+        self.tf_position[2] += .1
+        self.tf_position[1] += .2
+
+        while True:
+            goal = np.array(goal)
+            vector = goal - self.tf_position
+
+            if np.linalg.norm(vector) < 0.1:
+                self.tf_position = goal
+                self.publish_visual()
+                return self.position.tolist()
+
+            current_vel = vel * vector / np.linalg.norm(vector)
+            self.tf_position += current_vel
+
+            self.publish_visual()
+            sleep((abs(current_vel[0]) + abs(current_vel[1]) + abs(current_vel[2])))
+            vel += self.acc
+            vel = min(vel, self.max_vel)
+
+    def remove_tf(self):
+        self.tf_position = None
 
     def set_pos(self, goal: list):
 
@@ -74,9 +101,6 @@ class RobotHandler:
         marker.header.stamp = rospy.Time.now()
         marker.ns = self.name
         marker.lifetime = rospy.Duration(0)
-        # marker.color.r = .1
-        # marker.color.g = .15
-        # marker.color.b = .3
         marker.mesh_use_embedded_materials = True
         marker.pose.position.x = self.position[0]
         marker.pose.position.y = self.position[1]
@@ -97,8 +121,10 @@ class RobotHandler:
 
         pos = copy(self.position)
 
-        pos[2] += .05
+        pos[2] += .1
         pos[1] += .2
+        if self.tf_position is not None:
+            pos = self.tf_position
 
         rot = list(quaternion_about_axis(np.deg2rad(90.), [0, 0, 1]))
         self.br.sendTransform(pos.tolist(),
@@ -123,6 +149,8 @@ if __name__ == '__main__':
     place_robot.functionality["get_rot"] = lambda: robot.rotation
     place_robot.functionality["set_rot"] = robot.set_rot
     place_robot.functionality["rotate"] = robot.rotate
+    place_robot.functionality["place_block"] = robot.place_block
+    place_robot.functionality["remove_tf"] = robot.remove_tf
 
     while not rospy.is_shutdown():
         robot.publish_visual()

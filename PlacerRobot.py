@@ -103,7 +103,7 @@ class PlacerRobot(AbstractVirtualCapability):
         # x, y, z, w
         self.rotation = [0., 0., 0., 1.]
         self.functionality = {"get_name": None, "set_name": None, "get_pos": None, "set_pos": None, "get_rot": None,
-                              "set_rot": None, "rotate": None}
+                              "set_rot": None, "rotate": None, "place_block": None, "remove_tf": None}
         self.current_block_id = None
 
     def MoveBy(self, params: dict):
@@ -136,8 +136,15 @@ class PlacerRobot(AbstractVirtualCapability):
         return {"Quaternion": quat}
 
     def PlaceBlock(self, params: dict):
+        pos = params["Position3D"]
         if self.current_block_id is not None:
+            if self.functionality["place_block"] is not None:
+                self.functionality["place_block"](pos)
             self.invoke_sync("detach_block", {"SimpleIntegerParameter": self.current_block_id})
+            if self.functionality["remove_tf"] is not None:
+                self.functionality["remove_tf"]()
+        else:
+            raise Exception("No Block found")
         return {}
 
     def TransferBlock(self, params: dict):
