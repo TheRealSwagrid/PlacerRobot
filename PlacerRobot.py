@@ -114,7 +114,7 @@ class PlacerRobot(AbstractVirtualCapability):
 
         goal = copy(self.position)
 
-        goal += val * (np.round(Quaternion.from_value(np.array(self.rotation)), decimals=6).tolist() * self.direction)
+        goal += val * self.GetAbsoluteDirection({})["Vector3"]
 
         if self.functionality["set_pos"] is not None:
             self.position = self.functionality["set_pos"](goal)
@@ -195,7 +195,7 @@ class PlacerRobot(AbstractVirtualCapability):
 
     def GetAbsoluteDirection(self, params: dict):
         return {
-            "Vector3": np.round(Quaternion.from_value(np.array(self.rotation)) * self.direction, decimals=6).tolist()}
+            "Vector3": np.linalg.norm(np.round(Quaternion.from_value(np.array(self.rotation)) * self.direction, decimals=6)).tolist()}
 
     def SetDirection(self, params: dict):
         new_direction = params["Vector3"]
