@@ -112,11 +112,9 @@ class PlacerRobot(AbstractVirtualCapability):
         if self.functionality["set_name"] is not None:
             self.position = self.functionality["get_pos"]()
 
-        goal = copy(self.position)
+        goal = np.array(self.position)
 
-
-        goal += val * self.GetAbsoluteDirection(params)["Vector3"]
-
+        goal += val * np.array(self.GetAbsoluteDirection(params)["Vector3"])
 
         if self.functionality["set_pos"] is not None:
             self.position = self.functionality["set_pos"](goal)
