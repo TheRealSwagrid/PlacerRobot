@@ -200,7 +200,7 @@ class PlacerRobot(AbstractVirtualCapability):
         norm_dir = new_dir / np.linalg.norm(new_dir)
 
         return {
-            "Vector3": norm_dir}
+            "Vector3": norm_dir.tolist()}
 
     def SetDirection(self, params: dict):
         new_direction = params["Vector3"]
