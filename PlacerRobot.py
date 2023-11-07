@@ -205,6 +205,12 @@ class PlacerRobot(AbstractVirtualCapability):
         self.direction = new_direction
         return self.GetDirection(params)
 
+    def GetBlock(self, params: dict):
+        return {"SimpleIntegerParameter": self.current_block_id if self.current_block_id is not None else -1}
+
+    def SetBlock(self, params: dict):
+        return self.TransferBlock(params)
+
     def loop(self):
         pass
 
