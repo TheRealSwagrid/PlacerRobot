@@ -143,6 +143,7 @@ class PlacerRobot(AbstractVirtualCapability):
             self.invoke_sync("detach_block", {"SimpleIntegerParameter": self.current_block_id})
             if self.functionality["remove_tf"] is not None:
                 self.functionality["remove_tf"]()
+            self.current_block_id = None
         else:
             raise Exception("No Block found")
         return {}
