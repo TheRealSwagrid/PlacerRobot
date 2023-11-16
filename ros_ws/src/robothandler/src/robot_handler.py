@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from copy import copy
+from copy import copy, deepcopy
 from time import sleep
 
 import numpy as np
@@ -47,7 +47,7 @@ class RobotHandler:
 
     def place_block(self, goal: list):
         vel = self.acc
-        self.tf_position = copy(self.position)
+        self.tf_position = deepcopy(self.position)
         self.tf_position[2] += .1
         self.tf_position[1] += .2
 
