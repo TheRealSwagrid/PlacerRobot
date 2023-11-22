@@ -1,5 +1,7 @@
 AbstractVirtualCapability.py
 .idea
+.catkin_workspace
+CMakeLists.txt
 devel/
 build/
 
