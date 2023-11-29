@@ -18,7 +18,7 @@ class RobotHandler:
         self.position = np.array([0., 0., 0.])
         self.tf_position = None
         self.rotation = [0, 0, 0, 1]
-        self.scale = 2#.15
+        self.scale = 1#.15
         self.br = tf.TransformBroadcaster()
         self.pub = rospy.Publisher(f"/robot", Marker, queue_size=1)
         self.name = f"placerrobot@{int(rospy.get_param('~semantix_port'))}"
