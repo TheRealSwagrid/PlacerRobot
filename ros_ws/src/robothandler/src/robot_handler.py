@@ -42,7 +42,7 @@ class RobotHandler:
 
 
     def set_rot(self, rot):
-        self.rotation = quaternion_from_euler(rot[0], rot[1], rot[2])
+        self.rotation = rot
         return self.rotation
 
     def place_block(self, goal: list):
