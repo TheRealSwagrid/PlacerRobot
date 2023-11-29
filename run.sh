@@ -5,3 +5,6 @@ cp PlacerRobot.py ros_ws/src/robothandler/src
 cp AbstractVirtualCapability.py ros_ws/src/robothandler/src
 cd ros_ws && source /opt/ros/noetic/setup.bash && catkin_make
 source devel/setup.bash && roslaunch robothandler robothandler.launch semantix_port:="$port"
+sudo rm -R build
+sudo rm -R devel
+rm .catkin_workspace
