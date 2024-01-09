@@ -116,7 +116,8 @@ class PlacerRobot(AbstractVirtualCapability):
     def GetAbsoluteDirection(self, params: dict):
         print(f"{self.rotation} - {self.direction}")
         rot = quaternion.as_quat_array(self.rotation)
-        new_dir = quaternion.rotate_vectors(rot, np.array(self.direction))
+        new_dir = rot * np.array(self.direction) * rot.conjugate()
+        # new_dir = quaternion.rotate_vectors(rot, np.array(self.direction))
         abs_dir = [1. if x > 0.0 or x < 0.0 else 0. for x in np.abs(new_dir)]
         return {
             "Vector3": abs_dir}
