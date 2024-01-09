@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import signal
 import sys
-import time
+import quaternion
 from math import sqrt, cos, sin, acos
 from copy import copy
 from time import sleep
@@ -9,89 +9,6 @@ from time import sleep
 import numpy as np
 
 from AbstractVirtualCapability import AbstractVirtualCapability, VirtualCapabilityServer, formatPrint
-
-
-def normalize(v, tolerance=0.00001):
-    mag2 = sum(n * n for n in v)
-    if abs(mag2 - 1.0) > tolerance:
-        mag = sqrt(mag2)
-        v = tuple(n / mag for n in v)
-    return np.array(v)
-
-
-class Quaternion:
-
-    def from_axisangle(theta, v):
-        v = normalize(v)
-
-        new_quaternion = Quaternion()
-        new_quaternion._axisangle_to_q(theta, v)
-        return new_quaternion
-
-    def from_value(value):
-        new_quaternion = Quaternion()
-        new_quaternion._val = value
-        return new_quaternion
-
-    def _axisangle_to_q(self, theta, v):
-        x = v[0]
-        y = v[1]
-        z = v[2]
-
-        w = cos(theta / 2.)
-        x = x * sin(theta / 2.)
-        y = y * sin(theta / 2.)
-        z = z * sin(theta / 2.)
-
-        self._val = np.array([x, y, z, w])
-
-    def __mul__(self, b):
-
-        if isinstance(b, Quaternion):
-            return self._multiply_with_quaternion(b)
-        elif isinstance(b, (list, tuple, np.ndarray)):
-            if len(b) != 3:
-                raise Exception(f"Input vector has invalid length {len(b)}")
-            return self._multiply_with_vector(b)
-        else:
-            raise Exception(f"Multiplication with unknown type {type(b)}")
-
-    def _multiply_with_quaternion(self, q2):
-        x1, y1, z1, w1 = self._val
-        x2, y2, z2, w2 = q2._val
-        w = w1 * w2 - x1 * x2 - y1 * y2 - z1 * z2
-        x = w1 * x2 + x1 * w2 + y1 * z2 - z1 * y2
-        y = w1 * y2 + y1 * w2 + z1 * x2 - x1 * z2
-        z = w1 * z2 + z1 * w2 + x1 * y2 - y1 * x2
-
-        result = Quaternion.from_value(np.array((x, y, z, w)))
-        return result
-
-    def _multiply_with_vector(self, v):
-        q2 = Quaternion.from_value(np.append(v, 0.0))
-        return (self * q2 * self.get_conjugate())._val[:3]
-
-    def get_conjugate(self):
-        x, y, z, w = self._val
-        result = Quaternion.from_value(np.array((-x, -y, -z, w)))
-        return result
-
-    def __repr__(self):
-        v, theta = self.get_axisangle()
-        return f"((%.6f; %.6f, %.6f, %.6f))" % (v[0], v[1], v[2], theta)
-
-    def get_axisangle(self):
-        v, w = self._val[:3], self._val[-1]
-        theta = acos(w) * 2.0
-
-        return normalize(v), theta
-
-    def tolist(self):
-        return self._val.tolist()
-
-    def vector_norm(self):
-        v, w = self.get_axisangle()
-        return np.linalg.norm(v)
 
 
 class PlacerRobot(AbstractVirtualCapability):
@@ -198,11 +115,9 @@ class PlacerRobot(AbstractVirtualCapability):
 
     def GetAbsoluteDirection(self, params: dict):
         print(f"{self.rotation} - {self.direction}")
-
-        new_dir = np.round(Quaternion.from_value(np.array(self.rotation)) * self.direction, decimals=6)
-        norm_dir = new_dir / np.linalg.norm(new_dir)
-
-        abs_dir = [1. if x > 0.0 or x < 0.0 else 0. for x in np.abs(norm_dir)]
+        rot = quaternion.as_quat_array(self.rotation)
+        new_dir = quaternion.rotate_vectors(rot, np.array(self.direction))
+        abs_dir = [1. if x > 0.0 or x < 0.0 else 0. for x in np.abs(new_dir)]
         return {
             "Vector3": abs_dir}
 
