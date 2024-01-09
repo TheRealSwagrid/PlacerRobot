@@ -189,6 +189,7 @@ class PlacerRobot(AbstractVirtualCapability):
         quat = [0, 0, 0, 0]
         if self.functionality["get_rot"] is not None:
             quat = self.functionality["get_rot"]()
+            self.rotation = quat
         return {"Quaternion": quat}
 
     def GetDirection(self, params: dict):
