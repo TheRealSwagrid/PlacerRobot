@@ -106,10 +106,10 @@ class RobotHandler:
         marker.pose.position.x = self.position[0]
         marker.pose.position.y = self.position[1]
         marker.pose.position.z = self.position[2]
-        marker.pose.orientation.x = self.rotation[1]
-        marker.pose.orientation.y = self.rotation[2]
-        marker.pose.orientation.z = self.rotation[3]
-        marker.pose.orientation.w = self.rotation[0]
+        marker.pose.orientation.x = self.rotation[0]
+        marker.pose.orientation.y = self.rotation[1]
+        marker.pose.orientation.z = self.rotation[2]
+        marker.pose.orientation.w = self.rotation[3]
         # Scale down
         marker.scale.x = self.scale
         marker.scale.y = self.scale
