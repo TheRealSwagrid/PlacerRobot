@@ -13,7 +13,7 @@ RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sud
 
 RUN sudo apt-get update
 RUN apt-get update && apt-get install -y python3-rosinstall python3-rosinstall-generator python3-wstool  \
-    build-essential python3-rosdep python3-catkin-tools ros-noetic-vrpn-client-ros python-is-python3 python3-pip ros-noetic-tf
+    build-essential python3-rosdep python3-catkin-tools ros-noetic-vrpn-client-ros python-is-python3 python3-pip ros-noetic-tf numpy-quaternion
 
 # Add Files
 ADD ros_ws /ros_ws
