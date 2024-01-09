@@ -199,7 +199,7 @@ class PlacerRobot(AbstractVirtualCapability):
     def GetAbsoluteDirection(self, params: dict):
         new_dir = np.round(Quaternion.from_value(np.array(self.rotation)) * self.direction, decimals=6)
         norm_dir = new_dir / np.linalg.norm(new_dir)
-
+        norm_dir = [1. if i != 0.0 else 0.0 for i in norm_dir]
         return {
             "Vector3": norm_dir.tolist()}
 
