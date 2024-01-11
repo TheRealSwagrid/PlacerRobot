@@ -15,7 +15,7 @@ class PlacerRobot(AbstractVirtualCapability):
     def __init__(self, server):
         super().__init__(server)
         self.uri = f"PlacerRobot"
-        self.direction = [0., 1., 0.]
+        self.direction = [1., 0., 0.]
         self.position = [0., 0., 0.]
         # x, y, z, w
         self.rotation = [0., 0., 0., 1.]
