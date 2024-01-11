@@ -127,7 +127,7 @@ class RobotHandler:
         if self.tf_position is not None:
             pos = self.tf_position
 
-        rot = list(quaternion_about_axis(np.deg2rad(90.), [0, 0, 1]))
+        rot = [self.rotation[1], self.rotation[2], self.rotation[3], self.rotation[0]]
         self.br.sendTransform(pos.tolist(),
                               rot, rospy.Time.now(), self.name, "world")
 
