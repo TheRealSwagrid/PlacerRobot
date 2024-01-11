@@ -66,6 +66,8 @@ class PlacerRobot(AbstractVirtualCapability):
         return {}
 
     def TransferBlock(self, params: dict):
+        if self.current_block_id is not None:
+            raise ValueError(f"Still got the Block {self.current_block_id}")
         self.current_block_id = params["SimpleIntegerParameter"]
         self.invoke_sync("attach_block", {"SimpleIntegerParameter": self.current_block_id,
                                           "SimpleStringParameter": self.functionality["get_name"]()})
