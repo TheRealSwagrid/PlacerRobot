@@ -64,7 +64,7 @@ class PlacerRobot(AbstractVirtualCapability):
                 self.functionality["remove_tf"]()
             self.current_block_id = -1
         else:
-            raise Exception("No Block found")
+            raise ValueError(f"No Block found, block_id = {self.current_block_id}")
         return {}
 
     def TransferBlock(self, params: dict):
