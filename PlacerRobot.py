@@ -58,7 +58,7 @@ class PlacerRobot(AbstractVirtualCapability):
             if self.functionality["place_block"] is not None:
                 self.functionality["place_block"](pos)
             # Wait until the block has been set with the accurate position (BlockHandler is slow)
-            sleep(.25)
+            sleep(.05)
             self.invoke_sync("detach_block", {"SimpleIntegerParameter": self.current_block_id})
             if self.functionality["remove_tf"] is not None:
                 self.functionality["remove_tf"]()
@@ -69,14 +69,16 @@ class PlacerRobot(AbstractVirtualCapability):
 
     def TransferBlock(self, params: dict):
         block_id = params["SimpleIntegerParameter"]
-        if self.current_block_id != -1 and params["SimpleIntegerParameter"] != -1:
+        if self.current_block_id != -1 and block_id != -1:
             raise ValueError(f"Still got the Block {self.current_block_id} while waiting for block {block_id}")
         if block_id == -1:
+            self.current_block_id = -1
             return params
         self.current_block_id = block_id
         self.invoke_sync("attach_block", {"SimpleIntegerParameter": self.current_block_id,
                                           "SimpleStringParameter": self.functionality["get_name"]()})
         return params
+
 
     def SetPosition(self, params: dict):
         formatPrint(self, f"Set Position {params}")
