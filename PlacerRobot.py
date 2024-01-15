@@ -57,6 +57,8 @@ class PlacerRobot(AbstractVirtualCapability):
         if self.current_block_id is not None:
             if self.functionality["place_block"] is not None:
                 self.functionality["place_block"](pos)
+            # Wait until the block has been set with the accurate position (BlockHandler is slow)
+            sleep(.25)
             self.invoke_sync("detach_block", {"SimpleIntegerParameter": self.current_block_id})
             if self.functionality["remove_tf"] is not None:
                 self.functionality["remove_tf"]()
