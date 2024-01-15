@@ -21,7 +21,7 @@ class PlacerRobot(AbstractVirtualCapability):
         self.rotation = [0., 0., 0., 1.]
         self.functionality = {"get_name": None, "set_name": None, "get_pos": None, "set_pos": None, "get_rot": None,
                               "set_rot": None, "rotate": None, "place_block": None, "remove_tf": None}
-        self.current_block_id = None
+        self.current_block_id = -1
 
     def MoveBy(self, params: dict):
         formatPrint(self, f"Forwarding with {params}")
@@ -54,7 +54,7 @@ class PlacerRobot(AbstractVirtualCapability):
 
     def PlaceBlock(self, params: dict):
         pos = params["Position3D"]
-        if self.current_block_id is not None:
+        if self.current_block_id != -1:
             if self.functionality["place_block"] is not None:
                 self.functionality["place_block"](pos)
             # Wait until the block has been set with the accurate position (BlockHandler is slow)
@@ -62,20 +62,22 @@ class PlacerRobot(AbstractVirtualCapability):
             self.invoke_sync("detach_block", {"SimpleIntegerParameter": self.current_block_id})
             if self.functionality["remove_tf"] is not None:
                 self.functionality["remove_tf"]()
-            self.current_block_id = None
+            self.current_block_id = -1
         else:
             raise Exception("No Block found")
         return {}
 
     def TransferBlock(self, params: dict):
-        if self.current_block_id is not None and params["SimpleIntegerParameter"] != None:
-            raise ValueError(f"Still got the Block {self.current_block_id}")
-        self.current_block_id = params["SimpleIntegerParameter"]
-        if self.current_block_id is None:
+        block_id = params["SimpleIntegerParameter"]
+        if self.current_block_id != -1 and params["SimpleIntegerParameter"] != -1:
+            raise ValueError(f"Still got the Block {self.current_block_id} while waiting for block {block_id}")
+        if self.current_block_id == -1:
             return params
+        self.current_block_id = block_id
         self.invoke_sync("attach_block", {"SimpleIntegerParameter": self.current_block_id,
                                           "SimpleStringParameter": self.functionality["get_name"]()})
         return params
+
     def SetPosition(self, params: dict):
         formatPrint(self, f"Set Position {params}")
 
