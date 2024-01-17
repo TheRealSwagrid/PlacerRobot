@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <launch>
+    <param name="xmlrpc_port" value="$(arg xmlrpc_port)"/>
+    <param name="tcpros_port" value="$(arg tcpros_port)"/>
     <node pkg="robothandler" type="robot_handler.py" name="robot_handler_$(arg semantix_port)">
         <param name="semantix_port" value="$(arg semantix_port)"/>
-        <param name="xmlrpc_port" value="$(arg xmlrpc_port)"/>
-        <param name="tcpros_port" value="$(arg tcpros_port)"/>
     </node>
 </launch>
