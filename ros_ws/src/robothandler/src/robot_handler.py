@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+import os
 from copy import copy, deepcopy
 from time import sleep
 
@@ -133,9 +133,7 @@ class RobotHandler:
 
 
 if __name__ == '__main__':
-    xmlrpc_port = int(rospy.get_param('~xmlrpc_port'))
-    tcpros_port = int(rospy.get_param('~tcpros_port'))
-    rospy.init_node('rosnode', xmlrpc_port=xmlrpc_port, tcpros_port=tcpros_port)
+    rospy.init_node('rosnode', xmlrpc_port=int(os.environ["xmlrpc_port"]), tcpros_port=int(os.environ["tcpros_port"]))
     rate = rospy.Rate(25)
     rospy.logwarn("HEYO IM HERE")
     server = VirtualCapabilityServer(int(rospy.get_param('~semantix_port')))
