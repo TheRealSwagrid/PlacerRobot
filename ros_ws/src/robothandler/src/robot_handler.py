@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import os
+import socket
 from copy import copy, deepcopy
 from time import sleep
 
@@ -136,7 +137,7 @@ if __name__ == '__main__':
     rospy.init_node('rosnode', xmlrpc_port=int(os.environ["xmlrpc_port"]), tcpros_port=int(os.environ["tcpros_port"]))
     rate = rospy.Rate(25)
     rospy.logwarn("HEYO IM HERE")
-    server = VirtualCapabilityServer(int(rospy.get_param('~semantix_port')))
+    server = VirtualCapabilityServer(int(rospy.get_param('~semantix_port')), socket.gethostbyname(socket.gethostname()))
     place_robot = PlacerRobot(server)
     place_robot.start()
     robot = RobotHandler()
