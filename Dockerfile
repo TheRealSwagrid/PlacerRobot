@@ -5,12 +5,12 @@ ENV semantix_port=7500
 ENV xmlrpc_port=45100
 ENV tcpros_port=45101
 ENV DEBIAN_FRONTEND=noninteractive
-#ENV ROS_IP=127.0.0.1
-#ENV ROS_MASTER_URI=http://127.0.0.1:11311
+ENV ROS_IP=127.0.0.1
+ENV ROS_MASTER_URI=http://127.0.0.1:11311
 
 # ROS-Noetic Setup
 RUN sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
-RUN apt-get update && apt-get install -y curl
+RUN apt-get update && apt-get install -y curl vim
 RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
 
 RUN sudo apt-get update
@@ -24,6 +24,10 @@ ADD ros_ws /ros_ws
 COPY protocols /etc
 COPY PlacerRobot.py /ros_ws/src/robothandler/src
 COPY AbstractVirtualCapability.py ros_ws/src/robothandler/src
+
+RUN  vi +':wq ++ff=unix' /ros_ws/src/robothandler/src/PlacerRobot.py
+RUN  vi +':wq ++ff=unix' /ros_ws/src/robothandler/src/AbstractVirtualCapability.py
+RUN  vi +':wq ++ff=unix' /ros_ws/src/robothandler/src/robot_handler.py
 
 # Build Ros-Pkg and build
 RUN cd /ros_ws && source /opt/ros/noetic/setup.bash && catkin_make
