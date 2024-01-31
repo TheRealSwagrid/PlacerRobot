@@ -1,6 +1,10 @@
 #!/usr/bin/env python
+import random
 import signal
 import sys
+import threading
+import time
+
 import quaternion
 from math import sqrt, cos, sin, acos
 from copy import copy
@@ -22,6 +26,8 @@ class PlacerRobot(AbstractVirtualCapability):
         self.functionality = {"get_name": None, "set_name": None, "get_pos": None, "set_pos": None, "get_rot": None,
                               "set_rot": None, "rotate": None, "place_block": None, "remove_tf": None}
         self.current_block_id = -1
+        self.battery_charge_level = random.uniform(0.0, 100.0)
+        self.timer = None
 
     def MoveBy(self, params: dict):
         formatPrint(self, f"Forwarding with {params}")
@@ -141,9 +147,21 @@ class PlacerRobot(AbstractVirtualCapability):
     def SetBlock(self, params: dict):
         return self.TransferBlock(params)
 
-    def loop(self):
-        pass
+    def GetBatteryChargeLevel(self, params: dict):
+        return {"BatteryChargeLevel": self.battery_charge_level}
 
+    def SetBatteryChargeLevel(self, params: dict):
+        self.battery_charge_level = params["BatteryChargeLevel"]
+        return params["BatteryChargeLevel"]
+
+    def loop(self):
+        if self.timer is None:
+            self.timer = time.time()
+        elif time.time() - self.timer > 60:
+            self.timer = time.time()
+            self.battery_charge_level -= random.uniform(0.0, 2.0)
+            if self.battery_charge_level <= 0.0:
+                self.battery_charge_level = 0.0
 
 if __name__ == '__main__':
     # Needed for properly closing when process is being stopped with SIGTERM signal
