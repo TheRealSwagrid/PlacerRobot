@@ -169,7 +169,7 @@ class PlacerRobot(AbstractVirtualCapability):
     def loop(self):
         if self.timer is None:
             self.timer = time.time()
-        elif time.time() - self.timer > 60:
+        elif time.time() - self.timer > 5:
             self.timer = time.time()
             self.battery_charge_level -= random.uniform(0.0, 2.0)
             if self.battery_charge_level <= 0.0:
