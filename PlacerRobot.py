@@ -30,6 +30,8 @@ class PlacerRobot(AbstractVirtualCapability):
         self.timer = None
 
     def MoveBy(self, params: dict):
+        if self.battery_charge_level == 0.0:
+            raise Exception("No battery")
         formatPrint(self, f"Forwarding with {params}")
         val = params["SimpleDoubleParameter"]
         if self.functionality["set_name"] is not None:
@@ -44,6 +46,8 @@ class PlacerRobot(AbstractVirtualCapability):
         return {"Position3D": self.position}
 
     def RotateAroundAxis(self, params: dict):
+        if self.battery_charge_level == 0.0:
+            raise Exception("No battery")
         axis = params["Axis"]
         if axis == 'z':
             axis = [0, 0, 1]
@@ -59,6 +63,8 @@ class PlacerRobot(AbstractVirtualCapability):
         return {"Quaternion": quat}
 
     def PlaceBlock(self, params: dict):
+        if self.battery_charge_level == 0.0:
+            raise Exception("No battery")
         pos = params["Position3D"]
         if self.current_block_id != -1:
             if self.functionality["place_block"] is not None:
@@ -74,6 +80,8 @@ class PlacerRobot(AbstractVirtualCapability):
         return {}
 
     def TransferBlock(self, params: dict):
+        if self.battery_charge_level == 0.0:
+            raise Exception("No battery")
         block_id = params["SimpleIntegerParameter"]
         if self.current_block_id != -1 and block_id != -1:
             raise ValueError(f"Still got the Block {self.current_block_id} while waiting for block {block_id}")
@@ -87,6 +95,8 @@ class PlacerRobot(AbstractVirtualCapability):
 
 
     def SetPosition(self, params: dict):
+        if self.battery_charge_level == 0.0:
+            raise Exception("No battery")
         formatPrint(self, f"Set Position {params}")
 
         if self.functionality["set_pos"] is not None:
@@ -112,6 +122,8 @@ class PlacerRobot(AbstractVirtualCapability):
         return {"SimpleStringParameter": tf_name}
 
     def SetRotation(self, params: dict):
+        if self.battery_charge_level == 0.0:
+            raise Exception("No battery")
         quat = params["Quaternion"]
         if self.functionality["set_rot"] is not None:
             self.functionality["set_rot"](quat)
