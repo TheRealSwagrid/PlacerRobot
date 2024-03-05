@@ -189,6 +189,7 @@ if __name__ == '__main__':
             port = int(sys.argv[1])
         server = VirtualCapabilityServer(port)
         listener = PlacerRobot(server)
+        listener.uri = "PlacerRobot"
         listener.start()
         signal.signal(signal.SIGTERM, handler)
         listener.join()

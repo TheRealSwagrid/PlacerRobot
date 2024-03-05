@@ -139,6 +139,7 @@ if __name__ == '__main__':
     rospy.logwarn("HEYO IM HERE")
     server = VirtualCapabilityServer(int(rospy.get_param('~semantix_port')), socket.gethostbyname(socket.gethostname()))
     place_robot = PlacerRobot(server)
+    place_robot.uri = "PlacerRobot"
     place_robot.start()
     robot = RobotHandler()
 
