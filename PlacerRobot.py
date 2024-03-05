@@ -124,6 +124,8 @@ class PlacerRobot(AbstractVirtualCapability):
     def SetRotation(self, params: dict):
         if self.battery_charge_level == 0.0:
             raise Exception("No battery")
+        if len(params["Quaternion"]) != 4:
+            raise ValueError(f"Quaternion is WRONG: {params}")
         quat = params["Quaternion"]
         if self.functionality["set_rot"] is not None:
             self.functionality["set_rot"](quat)
