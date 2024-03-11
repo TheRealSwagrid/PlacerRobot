@@ -66,17 +66,17 @@ class PlacerRobot(AbstractVirtualCapability):
         if self.battery_charge_level == 0.0:
             raise Exception("No battery")
         pos = params["Position3D"]
-        if self.current_block_id != -1:
+        if self.current_block_id is not None:
             if self.functionality["place_block"] is not None:
                 self.functionality["place_block"](pos)
             # Wait until the block has been set with the accurate position (BlockHandler is slow)
-            sleep(.05)
+            sleep(.5)
             self.invoke_sync("detach_block", {"SimpleIntegerParameter": self.current_block_id})
             if self.functionality["remove_tf"] is not None:
                 self.functionality["remove_tf"]()
             self.current_block_id = -1
         else:
-            raise ValueError(f"No Block found, block_id = {self.current_block_id}")
+            raise Exception("No Block found")
         return {}
 
     def TransferBlock(self, params: dict):
