@@ -175,7 +175,7 @@ class PlacerRobot(AbstractVirtualCapability):
             self.timer = time.time()
             self.battery_charge_level -= random.uniform(0.0, 2.0)
             if self.battery_charge_level <= 0.0:
-                self.battery_charge_level = 100.0
+                self.battery_charge_level = 0.0
 
 if __name__ == '__main__':
     # Needed for properly closing when process is being stopped with SIGTERM signal
