@@ -166,7 +166,7 @@ class PlacerRobot(AbstractVirtualCapability):
 
     def SetBatteryChargeLevel(self, params: dict):
         self.battery_charge_level = params["BatteryChargeLevel"]
-        return params["BatteryChargeLevel"]
+        return self.GetBatteryChargeLevel(params)
 
     def loop(self):
         if self.timer is None:
