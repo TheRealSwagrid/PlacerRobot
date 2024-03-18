@@ -26,7 +26,7 @@ class PlacerRobot(AbstractVirtualCapability):
         self.functionality = {"get_name": None, "set_name": None, "get_pos": None, "set_pos": None, "get_rot": None,
                               "set_rot": None, "rotate": None, "place_block": None, "remove_tf": None}
         self.current_block_id = -1
-        self.battery_charge_level = random.uniform(60.0, 100.0)
+        self.battery_charge_level = random.uniform(20.0, 100.0)
         self.timer = None
 
     def MoveBy(self, params: dict):
