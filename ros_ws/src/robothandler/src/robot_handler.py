@@ -48,6 +48,9 @@ class RobotHandler:
 
     def place_block(self, goal: list):
         vel = self.acc
+        self.tf_position = np.array(goal)
+        self.publish_visual()
+        return
         self.tf_position = deepcopy(self.position)
         self.tf_position[2] += .1
         self.tf_position[1] += .2

@@ -19,6 +19,7 @@ class PlacerRobot(AbstractVirtualCapability):
     def __init__(self, server):
         super().__init__(server)
         self.uri = f"PlacerRobot"
+        self.use_battery = True
         self.direction = [1., 0., 0.]
         self.position = [0., 0., 0.]
         # x, y, z, w
@@ -26,7 +27,7 @@ class PlacerRobot(AbstractVirtualCapability):
         self.functionality = {"get_name": None, "set_name": None, "get_pos": None, "set_pos": None, "get_rot": None,
                               "set_rot": None, "rotate": None, "place_block": None, "remove_tf": None}
         self.current_block_id = -1
-        self.battery_charge_level = random.uniform(20.0, 100.0)
+        self.battery_charge_level = random.uniform(20.0, 100.0) if self.use_battery else 100.
         self.timer = None
 
     def MoveBy(self, params: dict):
@@ -67,8 +68,11 @@ class PlacerRobot(AbstractVirtualCapability):
             raise Exception("No battery")
         pos = params["Position3D"]
         if self.current_block_id is not None:
-            if self.functionality["place_block"] is not None:
-                self.functionality["place_block"](pos)
+            try:
+                if self.functionality["place_block"] is not None:
+                    self.functionality["place_block"](pos)
+            except Exception as e:
+                raise Exception(e)
             # Wait until the block has been set with the accurate position (BlockHandler is slow)
             sleep(.5)
             self.invoke_sync("detach_block", {"SimpleIntegerParameter": self.current_block_id})
@@ -169,13 +173,14 @@ class PlacerRobot(AbstractVirtualCapability):
         return self.GetBatteryChargeLevel(params)
 
     def loop(self):
-        if self.timer is None:
-            self.timer = time.time()
-        elif time.time() - self.timer > 5:
-            self.timer = time.time()
-            self.battery_charge_level -= random.uniform(0.1, 5.0)
-            if self.battery_charge_level <= 0.0:
-                self.battery_charge_level = 0.0
+        if self.use_battery:
+            if self.timer is None:
+                self.timer = time.time()
+            elif time.time() - self.timer > 5:
+                self.timer = time.time()
+                self.battery_charge_level -= random.uniform(0.1, 5.0)
+                if self.battery_charge_level <= 0.0:
+                    self.battery_charge_level = 0.0
 
 if __name__ == '__main__':
     # Needed for properly closing when process is being stopped with SIGTERM signal
